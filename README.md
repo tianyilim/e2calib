@@ -20,6 +20,39 @@ If you use this code in an academic context, please cite the following work:
 }
 ```
 
+## *Forked contribution is here!* Dockerfile Build Usage
+
+### Building Dockerfile
+You can build your own Docker image that contains the content of this repo with the following Dockerfile.
+
+It uses the ROS Noetic Docker image as a base, installs some extra dependencies from Kalibr (for safety), and then installs the Python requirements as described below. **No conda/venv is created**.
+
+As per Pytorch documentation [here](https://pytorch.org/get-started/previous-versions/#linux-and-windows-7), the supported CUDA versions are 11.8, 12.1, and 12.4. Choose whatever is installed on your system. Else, the dockerfile falls back to a CPU-only install.
+
+```bash
+# Example for Cuda 11.8
+# Similarly for Cuda 12.1, 12.4
+docker build -t tianyilim/e2calib:cuda11.8 --build-arg CUDA_VERSION=118 .
+```
+
+### Pulling Dockerfile
+As an alternative, pull something from Docker Hub:
+
+```bash
+# Choose one of each...
+docker pull tianyilim/e2calib:cuda11.8
+docker pull tianyilim/e2calib:cuda12.1
+docker pull tianyilim/e2calib:cuda12.4
+```
+
+### Container Usage
+
+After building, assuming you have [Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html), you should be able to run the container as so. Match the tag to the CUDA version you installed earlier.
+
+```bash
+docker run -it --gpus all tianyilim/e2calib:cuda11.8 /bin/bash
+```
+
 ## Installation
 The installation procedure is divided into two parts.
 First, installation of packages for the conversion code that must be completed outside of any virtual environment for compatibility reasons.

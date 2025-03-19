@@ -19,23 +19,7 @@ COPY requirements_no_torch.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
 
 # Install appropriate Pytorch for given Cuda version
-ARG cuda_installed=0
-RUN if [[ "$CUDA_VERSION" -eq "11.8" ]] ; then \
-    pip3 install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cu118 ; \
-    cuda_installed=1 ; \
-    fi
-RUN if [[ "$CUDA_VERSION" -eq "12.1" ]] ; then \
-    pip3 install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cu121 ; \
-    cuda_installed=1 ; \
-    fi
-RUN if [[ "$CUDA_VERSION" -eq "12.4" ]] ; then \
-    pip3 install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cu124 ; \
-    cuda_installed=1 ; \
-    fi
-RUN if [[ ${cuda_installed} -eq 0 ]] ; then \
-    echo "CUDA version not supported, falling back to CPU-only install." ; \
-    ip install torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cpu ; \
-    fi
+RUN pip3 install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cu${CUDA_VERSION}
 
 # Install e2calib
 RUN mkdir /e2calib
